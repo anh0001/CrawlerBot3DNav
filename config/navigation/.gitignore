@@ -1,0 +1,75 @@
+# ROS-specific files
+*.log
+*.bag
+*.db
+
+# Python-specific files
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+*.manifest
+*.spec
+
+# Jupyter Notebook files
+.ipynb_checkpoints
+
+# MATLAB-specific files
+*.mex*
+*.log
+*.asv
+*.bak
+*.tmp
+*.mat
+*.mlx
+
+# General backup and temporary files
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Directory-specific ignores
+rosbag/
+logs/
+results/
+build/
+devel/
+install/
+.moc/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+.DS_Store
+._.DS_Store
+.VSCodeCounter
+*.vscode/
+.idea/
+.vscode/
+*.iml
+.vs/
