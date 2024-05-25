@@ -19,6 +19,7 @@ sudo apt-get install librealsense2-dbg
 ```
 
 Verify the installation by running the RealSense viewer:
+USB port issues: Ensure that your RealSense camera is properly connected to a USB 3.0 port and that the port itself is functioning correctly. Try different USB ports or computers to isolate hardware issues.
 ```bash
 realsense-viewer
 ```
@@ -69,7 +70,7 @@ cd ~/catkin_ws/
 catkin_make
 ```
 
-Clone the RealSense ROS wrapper repository:
+Clone the RealSense ROS wrapper repository, but use ros1-legacy as we are going to use ros1:
 ```bash
 cd ~/catkin_ws/src
 git clone https://github.com/IntelRealSense/realsense-ros.git
