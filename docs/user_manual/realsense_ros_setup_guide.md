@@ -60,7 +60,7 @@ The RealSense ROS wrapper allows you to use RealSense cameras with ROS.
 
 Install the ROS wrapper for RealSense:
 ```bash
-sudo apt install ros-noetic-ddynamic-reconfigure ros-noetic-realsense2-camera ros-noetic-realsense2-description
+sudo apt install ros-noetic-realsense2-camera ros-noetic-ddynamic-reconfigure ros-noetic-realsense2-camera ros-noetic-realsense2-description
 ```
 
 Create a ROS workspace:
