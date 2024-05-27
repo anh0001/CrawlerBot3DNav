@@ -1,0 +1,36 @@
+# Installing ROS Bridge in ROS Noetic on Ubuntu 20
+
+To install ROS Bridge in ROS Noetic on Ubuntu 20, follow these steps:
+
+1. Open a terminal.
+
+2. Add the ROS Noetic repository to your sources list by running the following command:
+    ```
+    sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros-noetic.list'
+    ```
+
+3. Set up your keys by running the following command:
+    ```
+    curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+    ```
+
+4. Update your package list by running the following command:
+    ```
+    sudo apt update
+    ```
+
+5. Install ROS Bridge by running the following command:
+    ```
+    sudo apt install ros-noetic-rosbridge-server
+    ```
+
+6. Verify the installation by running the following command:
+    ```
+    roslaunch rosbridge_server rosbridge_websocket.launch
+    ```
+
+    If the installation was successful, you should see output indicating that the ROS Bridge server is running.
+
+Congratulations! You have successfully installed ROS Bridge in ROS Noetic on Ubuntu 20.
+
+
