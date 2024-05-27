@@ -6,11 +6,8 @@
   <link rel="stylesheet" type="text/css" href="css/styles.css">
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/eventemitter2@6.4.9/lib/eventemitter2.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/roslib@1/build/roslib.min.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; }
-    #camera_feed img { width: 640px; height: 480px; }
-    #lidar_data { width: 640px; height: 480px; }
-  </style>
+  <script type="text/javascript" src="js/rosbridge_setup.js"></script>
+  <script type="text/javascript" src="js/sensor_visualization.js"></script>
 </head>
 <body>
   <h1>Robot Control Interface</h1>
@@ -19,7 +16,7 @@
     <button onclick="stopRecording()">Stop Recording</button>
     <button onclick="pauseRecording()">Pause Recording</button>
   </div>
-  <div>
+  <div id="connection">
     <label for="websocket_url">WebSocket URL:</label>
     <input type="text" id="websocket_url" value="ws://100.98.51.12:9090">
     <button onclick="connectRos()">Connect</button>
@@ -30,89 +27,5 @@
   <div>
     <canvas id="lidar_data"></canvas>
   </div>
-  <script type="text/javascript">
-    var ros;
-
-    function connectRos() {
-      var url = document.getElementById('websocket_url').value;
-      ros = new ROSLIB.Ros({
-        url: url
-      });
-
-      ros.on('connection', function() {
-        console.log('Connected to websocket server.');
-        setupTopics();
-      });
-
-      ros.on('error', function(error) {
-        console.log('Error connecting to websocket server: ', error);
-      });
-
-      ros.on('close', function() {
-        console.log('Connection to websocket server closed.');
-      });
-    }
-
-    function setupTopics() {
-      // Camera and LiDAR data visualization functions
-      var cameraTopic = new ROSLIB.Topic({
-        ros: ros,
-        name: '/camera/color/image_raw',
-        messageType: 'sensor_msgs/Image'
-      });
-
-      cameraTopic.subscribe(function(message) {
-        var img = document.getElementById('camera_image');
-        img.src = 'data:image/jpeg;base64,' + message.data;
-      });
-
-      var lidarTopic = new ROSLIB.Topic({
-        ros: ros,
-        name: '/lidar/points',
-        messageType: 'sensor_msgs/PointCloud2'
-      });
-
-      lidarTopic.subscribe(function(message) {
-        var canvas = document.getElementById('lidar_data');
-        var context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Example placeholder for LiDAR data visualization
-        context.fillStyle = 'black';
-        context.fillText("LiDAR Data", 10, 50);
-      });
-    }
-
-    // Recording control functions
-    function startRecording() {
-      var startMsg = new ROSLIB.Message({ data: 'start' });
-      var recordingTopic = new ROSLIB.Topic({
-        ros: ros,
-        name: '/recording_control',
-        messageType: 'std_msgs/String'
-      });
-      recordingTopic.publish(startMsg);
-    }
-
-    function stopRecording() {
-      var stopMsg = new ROSLIB.Message({ data: 'stop' });
-      var recordingTopic = new ROSLIB.Topic({
-        ros: ros,
-        name: '/recording_control',
-        messageType: 'std_msgs/String'
-      });
-      recordingTopic.publish(stopMsg);
-    }
-
-    function pauseRecording() {
-      var pauseMsg = new ROSLIB.Message({ data: 'pause' });
-      var recordingTopic = new ROSLIB.Topic({
-        ros: ros,
-        name: '/recording_control',
-        messageType: 'std_msgs/String'
-      });
-      recordingTopic.publish(pauseMsg);
-    }
-  </script>
 </body>
 </html>

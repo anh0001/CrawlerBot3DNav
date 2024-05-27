@@ -1,0 +1,76 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  #controls {
+    margin: 20px 0;
+  }
+  
+  #controls button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #controls button:hover {
+    background-color: #45a049;
+  }
+  
+  #connection {
+    margin: 20px 0;
+  }
+  
+  #connection input {
+    padding: 10px;
+    margin-right: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  #connection button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #connection button:hover {
+    background-color: #007BB5;
+  }
+  
+  #camera_feed img {
+    width: 640px;
+    height: 480px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  #lidar_data {
+    width: 640px;
+    height: 480px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background-color: white;
+  }
