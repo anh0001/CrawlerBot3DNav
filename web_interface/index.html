@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Robot Control Interface</title>
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+  <script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+  <script type="text/javascript" src="http://cdn.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+  <script type="text/javascript" src="js/rosbridge_setup.js"></script>
+  <script type="text/javascript" src="js/sensor_visualization.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    #camera_feed img { width: 640px; height: 480px; }
+    #lidar_data { width: 640px; height: 480px; }
+  </style>
+</head>
+<body>
+  <h1>Robot Control Interface</h1>
+  <div id="controls">
+    <button onclick="startRecording()">Start Recording</button>
+    <button onclick="stopRecording()">Stop Recording</button>
+    <button onclick="pauseRecording()">Pause Recording</button>
+  </div>
+  <div id="camera_feed"></div>
+  <div id="lidar_data"></div>
+  <script type="text/javascript">
+    var ros = new ROSLIB.Ros({
+      url: 'ws://localhost:9090'
+    });
+
+    ros.on('connection', function() {
+      console.log('Connected to websocket server.');
+    });
+
+    ros.on('error', function(error) {
+      console.log('Error connecting to websocket server: ', error);
+    });
+
+    ros.on('close', function() {
+      console.log('Connection to websocket server closed.');
+    });
+
+    var recordingTopic = new ROSLIB.Topic({
+      ros: ros,
+      name: '/recording_control',
+      messageType: 'std_msgs/String'
+    });
+
+    function startRecording() {
+      var startMsg = new ROSLIB.Message({ data: 'start' });
+      recordingTopic.publish(startMsg);
+    }
+
+    function stopRecording() {
+      var stopMsg = new ROSLIB.Message({ data: 'stop' });
+      recordingTopic.publish(stopMsg);
+    }
+
+    function pauseRecording() {
+      var pauseMsg = new ROSLIB.Message({ data: 'pause' });
+      recordingTopic.publish(pauseMsg);
+    }
+
+    var cameraTopic = new ROSLIB.Topic({
+      ros: ros,
+      name: '/camera/color/image_raw',
+      messageType: 'sensor_msgs/Image'
+    });
+
+    cameraTopic.subscribe(function(message) {
+      var img = document.createElement('img');
+      img.src = 'data:image/jpeg;base64,' + message.data;
+      document.getElementById('camera_feed').appendChild(img);
+    });
+
+    var lidarTopic = new ROSLIB.Topic({
+      ros: ros,
+      name: '/lidar/points',
+      messageType: 'sensor_msgs/PointCloud2'
+    });
+
+    lidarTopic.subscribe(function(message) {
+      var canvas = document.getElementById('lidar_data');
+      var context = canvas.getContext('2d');
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Example placeholder for LiDAR data visualization
+      context.fillStyle = 'black';
+      context.fillText("LiDAR Data", 10, 50);
+    });
+  </script>
+</body>
+</html>
