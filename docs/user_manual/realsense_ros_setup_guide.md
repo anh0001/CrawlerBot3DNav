@@ -63,17 +63,10 @@ Install the ROS wrapper for RealSense:
 sudo apt install ros-noetic-realsense2-camera ros-noetic-ddynamic-reconfigure ros-noetic-realsense2-camera ros-noetic-realsense2-description
 ```
 
-Create a ROS workspace:
-```bash
-mkdir -p ~/catkin_ws/src
-cd ~/catkin_ws/
-catkin_make
-```
-
 Clone the RealSense ROS wrapper repository, but use ros1-legacy as we are going to use ros1:
 ```bash
-cd ~/catkin_ws/src
-git clone https://github.com/IntelRealSense/realsense-ros.git
+cd src/
+git subtree add --prefix realsense-ros https://github.com/IntelRealSense/realsense-ros.git ros1-legacy --squash
 cd ..
 catkin_make
 ```
