@@ -7,11 +7,6 @@
     <param name="enable_depth" value="true"/>
   </node>
 
-  <!-- LiDAR Node -->
-  <node pkg="your_lidar_driver_package" type="your_lidar_driver_node" name="lidar" output="screen">
-    <!-- LiDAR configuration parameters -->
-  </node>
-
   <!-- ROS Bridge Server -->
   <node pkg="rosbridge_server" type="rosbridge_websocket" name="rosbridge_websocket">
     <param name="port" value="9090"/>

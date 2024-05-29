@@ -33,4 +33,18 @@ To install ROS Bridge in ROS Noetic on Ubuntu 20, follow these steps:
 
 Congratulations! You have successfully installed ROS Bridge in ROS Noetic on Ubuntu 20.
 
+# Running Mock Web Interface
 
+To run the mock web interface, follow the steps below:
+
+1. Launch the web interface using the `roslaunch` command:
+
+```bash
+roslaunch launch/web_interface.launch
+```
+
+1.　Start the web server by executing the start script:
+
+```bash
+./scripts/start_web_server.sh
+```
