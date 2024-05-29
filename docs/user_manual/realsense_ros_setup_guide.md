@@ -93,3 +93,7 @@ roslaunch realsense2_camera rs_camera.launch
 ```
 
 This setup will allow you to use the Intel RealSense D455 camera with ROS Noetic on Ubuntu 20.04. The RealSense ROS wrapper provides various topics and services to interact with the camera, such as depth images, color images, and IMU data.
+
+# Important Note
+
+Ensure that the RealSense D455 camera's USB cable is connected to a high-speed USB port on the Intel NUC box.

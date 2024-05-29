@@ -2,6 +2,7 @@ var ros;
 
 window.connectRos = function() {
   var url = document.getElementById('websocket_url').value;
+  console.log('Connecting to ROS at', url);
   ros = new ROSLIB.Ros({
     url: url
   });
@@ -12,7 +13,7 @@ window.connectRos = function() {
   });
 
   ros.on('error', function(error) {
-    console.log('Error connecting to websocket server: ', error);
+    console.error('Error connecting to websocket server:', error);
   });
 
   ros.on('close', function() {
@@ -22,7 +23,7 @@ window.connectRos = function() {
 
 function setupTopics() {
   setupCameraTopic();
-  setupLidarTopic();
+  // setupLidarTopic();
 }
 
 window.startRecording = function() {
