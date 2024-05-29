@@ -48,3 +48,5 @@ roslaunch launch/web_interface.launch
 ```bash
 ./scripts/start_web_server.sh
 ```
+
+# Running with real sense camera
