@@ -6,34 +6,34 @@ function setupCameraTopic() {
     messageType: 'sensor_msgs/Image'
   });
 
-  cameraTopic.subscribe(function (message) {
+  cameraTopic.subscribe(function(message) {
     try {
       // console.log('Received camera image message:', message);
 
-      // Get the image dimensions and data
       var width = message.width;
       var height = message.height;
-      var imageData = message.data;
+      var data = atob(message.data); // Decode base64 to binary
 
       // Create a new canvas element
       var canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
-
-      // Get the canvas context and create an ImageData object
       var context = canvas.getContext('2d');
-      var imageDataObject = context.createImageData(width, height);
 
-      // Decode the base64 string to raw binary data
-      var binary = atob(imageData);
+      // Create an ImageData object
+      var imageData = context.createImageData(width, height);
 
-      // Convert the binary data to Uint8ClampedArray and set it to imageDataObject
-      for (var i = 0; i < imageDataObject.data.length; i++) {
-        imageDataObject.data[i] = binary.charCodeAt(i);
+      // Copy the binary data into the ImageData object
+      var i, j;
+      for (i = 0, j = 0; i < data.length; i += 3, j += 4) {
+        imageData.data[j] = data.charCodeAt(i);      // R
+        imageData.data[j + 1] = data.charCodeAt(i + 1);  // G
+        imageData.data[j + 2] = data.charCodeAt(i + 2);  // B
+        imageData.data[j + 3] = 255;                // A (Alpha)
       }
 
       // Put the image data to the canvas context
-      context.putImageData(imageDataObject, 0, 0);
+      context.putImageData(imageData, 0, 0);
 
       // Convert the canvas content to a base64 PNG image
       var img = document.getElementById('camera_image');
