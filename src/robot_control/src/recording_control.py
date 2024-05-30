@@ -2,7 +2,7 @@
 import rospy
 import rosbag
 from std_msgs.msg import String
-from sensor_msgs.msg import CameraInfo, Image, PointCloud2, CompressedImage
+from sensor_msgs.msg import CameraInfo, CompressedImage, PointCloud2
 import message_filters
 import os
 from datetime import datetime
@@ -58,7 +58,7 @@ def save_data_callback(msg, topic_name):
     if recording and bag:
         rospy.loginfo(f"Writing message to {topic_name}")
         bag.write(topic_name, msg)
-        if bag.size() > bag_size_limit:
+        if bag.size > bag_size_limit:
             bag.close()
             start_new_bag()
 
@@ -74,17 +74,17 @@ def recording_control():
     depth_info_sub = message_filters.Subscriber('/camera/depth/camera_info', CameraInfo)
     depth_image_sub = message_filters.Subscriber('/camera/depth/image_rect_raw/compressed', CompressedImage)
     depth_points_sub = message_filters.Subscriber('/camera/depth/color/points', PointCloud2)
-    lidar_points_sub = message_filters.Subscriber('/lidar/points', PointCloud2)
+    # lidar_points_sub = message_filters.Subscriber('/lidar/points', PointCloud2)
 
     # Synchronize messages and throttle them to the desired frequency
     ts = message_filters.ApproximateTimeSynchronizer(
-        [camera_info_sub, image_sub, depth_info_sub, depth_image_sub, depth_points_sub, lidar_points_sub], 
+        [camera_info_sub, image_sub, depth_info_sub, depth_image_sub, depth_points_sub], 
         queue_size=10, 
         slop=0.1
     )
     ts.registerCallback(lambda *msgs: [save_data_callback(msg, topic_name) for msg, topic_name in zip(msgs, 
                       ['/camera/color/camera_info', '/camera/color/image_raw/compressed', '/camera/depth/camera_info', 
-                       '/camera/depth/image_rect_raw/compressed', '/camera/depth/color/points', '/lidar/points'])])
+                       '/camera/depth/image_rect_raw/compressed', '/camera/depth/color/points'])])
 
     rospy.spin()
 
