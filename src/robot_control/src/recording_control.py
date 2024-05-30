@@ -56,6 +56,7 @@ def pause_recording():
 def save_data_callback(msg, topic_name):
     global recording, bag
     if recording and bag:
+        rospy.loginfo(f"Writing message to {topic_name}")
         bag.write(topic_name, msg)
         if bag.size() > bag_size_limit:
             bag.close()
