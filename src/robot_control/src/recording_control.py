@@ -44,8 +44,11 @@ def recording_control():
 
     # Subscribe to the sensor topics and set up callbacks to save data
     sensor_topics = [
+        ('/camera/color/camera_info', 'sensor_msgs/CameraInfo'),
         ('/camera/color/image_raw', 'sensor_msgs/Image'),
-        ('/camera/depth/image_raw', 'sensor_msgs/Image'),
+        ('/camera/depth/camera_info', 'sensor_msgs/CameraInfo'),
+        ('/camera/depth/image_rect_raw', 'sensor_msgs/Image'),
+        ('/camera/depth/color/points', 'sensor_msgs/PointCloud2'),
         ('/lidar/points', 'sensor_msgs/PointCloud2')
     ]
 
