@@ -2,7 +2,7 @@
 import rospy
 import rosbag
 from std_msgs.msg import String
-from sensor_msgs.msg import CameraInfo, Image, PointCloud2
+from sensor_msgs.msg import CameraInfo, Image, PointCloud2, CompressedImage
 import message_filters
 import os
 from datetime import datetime
@@ -71,9 +71,9 @@ def recording_control():
 
     # Subscribe to the sensor topics and set up callbacks to save data
     camera_info_sub = message_filters.Subscriber('/camera/color/camera_info', CameraInfo)
-    image_sub = message_filters.Subscriber('/camera/color/image_raw/compressed', Image)
+    image_sub = message_filters.Subscriber('/camera/color/image_raw/compressed', CompressedImage)
     depth_info_sub = message_filters.Subscriber('/camera/depth/camera_info', CameraInfo)
-    depth_image_sub = message_filters.Subscriber('/camera/depth/image_rect_raw/compressed', Image)
+    depth_image_sub = message_filters.Subscriber('/camera/depth/image_rect_raw/compressed', CompressedImage)
     depth_points_sub = message_filters.Subscriber('/camera/depth/color/points', PointCloud2)
     lidar_points_sub = message_filters.Subscriber('/lidar/points', PointCloud2)
 
