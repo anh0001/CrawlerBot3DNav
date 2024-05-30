@@ -17,7 +17,7 @@ def control_callback(msg):
         rospy.loginfo('Starting recording...')
         directory = os.path.join(os.path.dirname(__file__), '../../../rosbag')
         bag_filename = os.path.join(directory, 'recording_{}.bag'.format(datetime.now().strftime("%Y%m%d_%H%M%S")))
-        bag = rosbag.Bag(bag_filename, 'w')
+        bag = rosbag.Bag(bag_filename, 'w', compression=rosbag.Compression.LZ4)
         recording = True
         rospy.loginfo('Recording started: {}'.format(bag_filename))
     elif msg.data == 'stop' and recording:
@@ -45,9 +45,9 @@ def recording_control():
     # Subscribe to the sensor topics and set up callbacks to save data
     sensor_topics = [
         ('/camera/color/camera_info', 'sensor_msgs/CameraInfo'),
-        ('/camera/color/image_raw', 'sensor_msgs/Image'),
+        ('/camera/color/image_raw/compressed', 'sensor_msgs/Image'),
         ('/camera/depth/camera_info', 'sensor_msgs/CameraInfo'),
-        ('/camera/depth/image_rect_raw', 'sensor_msgs/Image'),
+        ('/camera/depth/image_rect_raw/compressed', 'sensor_msgs/Image'),
         ('/camera/depth/color/points', 'sensor_msgs/PointCloud2'),
         ('/lidar/points', 'sensor_msgs/PointCloud2')
     ]
