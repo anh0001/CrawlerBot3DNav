@@ -40,7 +40,7 @@ To run the mock web interface, follow the steps below:
 1. Launch the web interface using the `roslaunch` command:
 
 ```bash
-roslaunch launch/web_interface.launch
+roslaunch launch/mock_web_interface.launch
 ```
 
 1.　Start the web server by executing the start script:
