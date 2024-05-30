@@ -15,7 +15,7 @@ def control_callback(msg):
 
     if msg.data == 'start' and not recording:
         rospy.loginfo('Starting recording...')
-        bag_filename = os.path.join('/path/to/rosbag', 'recording_{}.bag'.format(datetime.now().strftime("%Y%m%d_%H%M%S")))
+        bag_filename = os.path.join('rosbag/', 'recording_{}.bag'.format(datetime.now().strftime("%Y%m%d_%H%M%S")))
         bag = rosbag.Bag(bag_filename, 'w')
         recording = True
         rospy.loginfo('Recording started: {}'.format(bag_filename))
