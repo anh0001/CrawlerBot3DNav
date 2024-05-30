@@ -2,6 +2,8 @@
 import rospy
 import rosbag
 from std_msgs.msg import String
+from sensor_msgs.msg import CameraInfo, Image, PointCloud2
+import message_filters
 import os
 from datetime import datetime
 
@@ -13,6 +15,7 @@ bag_counter = 0
 bag_size_limit = 1024 * 1024 * 1024  # 1 GB
 buffer_size = 50 * 1024 * 1024  # 50 MB
 chunk_size = 10 * 1024 * 1024  # 10 MB
+recording_frequency = 10  # 10 Hz
 
 def control_callback(msg):
     global recording, bag, bag_filename, bag_counter
@@ -67,17 +70,22 @@ def recording_control():
     rospy.Subscriber('/recording_control', String, control_callback)
 
     # Subscribe to the sensor topics and set up callbacks to save data
-    sensor_topics = [
-        ('/camera/color/camera_info', 'sensor_msgs/CameraInfo'),
-        ('/camera/color/image_raw/compressed', 'sensor_msgs/Image'),
-        ('/camera/depth/camera_info', 'sensor_msgs/CameraInfo'),
-        ('/camera/depth/image_rect_raw/compressed', 'sensor_msgs/Image'),
-        ('/camera/depth/color/points', 'sensor_msgs/PointCloud2'),
-        ('/lidar/points', 'sensor_msgs/PointCloud2')
-    ]
+    camera_info_sub = message_filters.Subscriber('/camera/color/camera_info', CameraInfo)
+    image_sub = message_filters.Subscriber('/camera/color/image_raw/compressed', Image)
+    depth_info_sub = message_filters.Subscriber('/camera/depth/camera_info', CameraInfo)
+    depth_image_sub = message_filters.Subscriber('/camera/depth/image_rect_raw/compressed', Image)
+    depth_points_sub = message_filters.Subscriber('/camera/depth/color/points', PointCloud2)
+    lidar_points_sub = message_filters.Subscriber('/lidar/points', PointCloud2)
 
-    for topic_name, topic_type in sensor_topics:
-        rospy.Subscriber(topic_name, rospy.AnyMsg, lambda msg, topic_name=topic_name: save_data_callback(msg, topic_name))
+    # Synchronize messages and throttle them to the desired frequency
+    ts = message_filters.ApproximateTimeSynchronizer(
+        [camera_info_sub, image_sub, depth_info_sub, depth_image_sub, depth_points_sub, lidar_points_sub], 
+        queue_size=10, 
+        slop=0.1
+    )
+    ts.registerCallback(lambda *msgs: [save_data_callback(msg, topic_name) for msg, topic_name in zip(msgs, 
+                      ['/camera/color/camera_info', '/camera/color/image_raw/compressed', '/camera/depth/camera_info', 
+                       '/camera/depth/image_rect_raw/compressed', '/camera/depth/color/points', '/lidar/points'])])
 
     rospy.spin()
 
