@@ -13,8 +13,6 @@ bag = None
 bag_filename = ""
 bag_counter = 0
 bag_size_limit = 1024 * 1024 * 1024  # 1 GB
-buffer_size = 50 * 1024 * 1024  # 50 MB
-chunk_size = 10 * 1024 * 1024  # 10 MB
 recording_frequency = 10  # 10 Hz
 
 def control_callback(msg):
@@ -35,7 +33,7 @@ def start_new_bag():
         os.makedirs(directory)
     bag_counter += 1
     bag_filename = os.path.join(directory, 'recording_{}_part{}.bag'.format(datetime.now().strftime("%Y%m%d_%H%M%S"), bag_counter))
-    bag = rosbag.Bag(bag_filename, 'w', compression=rosbag.Compression.LZ4, buffer_size=buffer_size, chunk_threshold=chunk_size)
+    bag = rosbag.Bag(bag_filename, 'w', compression=rosbag.Compression.LZ4)
     recording = True
     rospy.loginfo('Recording started: {}'.format(bag_filename))
 
