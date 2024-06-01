@@ -145,6 +145,9 @@ ping <sensor-ip-address>
   ]
 }
 
+host ip address 192.168.1.50
+lidar ip address 192.168.1.192
+
 # Notes
 ## To delete a subtree that you have added to your Git repository, you need to follow a few steps. Here’s how you can do it:
 
@@ -166,5 +169,4 @@ ping <sensor-ip-address>
    git push origin main --force
    ```
 
-### Note:
 Rewriting history can cause problems if others are working on the same repository. Make sure to inform your team and coordinate accordingly.
