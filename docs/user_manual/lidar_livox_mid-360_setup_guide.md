@@ -1,4 +1,18 @@
-# Create a Subtree of Lidar Livox Mid-360
+# Lidar Livox Mid-360 Subtree Creation Guide
+
+This guide will walk you through the process of creating subtrees for Lidar Livox Mid-360.
+
+## Step 1: Create a Subtree of Livox SDK2
+
+First, we need to create a subtree of the Livox SDK2. Run the following command:
+
+```bash
+git subtree add --prefix=src/Livox-SDK2 https://github.com/Livox-SDK/Livox-SDK2.git master --squash
+```
+
+After running the command, follow the installation instructions in the readme file.
+
+## Create subtree of github livox_ros_driver2
 
 To create a subtree of Lidar Livox Mid-360, use the following command:
 
@@ -6,7 +20,13 @@ To create a subtree of Lidar Livox Mid-360, use the following command:
 git subtree add --prefix=src/livox_ros_driver2 https://github.com/Livox-SDK/livox_ros_driver2.git master --squash
 ```
 
-# To delete a subtree that you have added to your Git repository, you need to follow a few steps. Here’s how you can do it:
+Run this command
+```bash
+src/livox_ros_driver2/build.sh ROS1
+```
+
+# Notes
+## To delete a subtree that you have added to your Git repository, you need to follow a few steps. Here’s how you can do it:
 
 1. Remove the subtree directory: First, delete the subtree directory from your working directory. In your case, it would be `src/livox_ros_driver`.
 
