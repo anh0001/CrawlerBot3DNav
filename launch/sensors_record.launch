@@ -37,6 +37,36 @@
     <arg name="unite_imu_method" value="" />
   </include>
 
+  <!-- Launch the Livox LiDAR node -->
+  <include file="$(find livox_ros_driver2)/msg_MID360.launch">
+    <!-- bd_list: Set the broadcast list for the LiDAR -->
+    <arg name="bd_list" value="100000000000000" />
+
+    <!-- xfer_format: Set the transfer format for the LiDAR -->
+    <arg name="xfer_format" value="0" />
+
+    <!-- multi_topic: Set the multi-topic mode for the LiDAR -->
+    <arg name="multi_topic" value="0" />
+
+    <!-- data_src: Set the data source for the LiDAR -->
+    <arg name="data_src" value="0" />
+
+    <!-- publish_freq: Set the publish frequency for the LiDAR -->
+    <arg name="publish_freq" value="10.0" />
+
+    <!-- output_type: Set the output type for the LiDAR -->
+    <arg name="output_type" value="0" />
+
+    <!-- rviz_enable: Enable or disable RViz visualization -->
+    <arg name="rviz_enable" value="true" />
+
+    <!-- rosbag_enable: Enable or disable rosbag recording -->
+    <arg name="rosbag_enable" value="false" />
+
+    <arg name="user_config_path" value="../config/sensors/MID360_config.json"/>
+
+  </include>
+
   <!-- Launch the ROS Bridge Server -->
   <node pkg="rosbridge_server" type="rosbridge_websocket" name="rosbridge_websocket">
     <!-- port: Set the port for the ROS Bridge Server -->
