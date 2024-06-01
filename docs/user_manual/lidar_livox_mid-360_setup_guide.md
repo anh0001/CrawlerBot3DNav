@@ -23,7 +23,7 @@ git subtree add --prefix=src/livox_ros_driver https://github.com/Livox-SDK/livox
 
 4. Force push the changes (optional): If you are working on a shared repository, you might need to force push the changes to the remote repository.
    ```bash
-   git push origin master --force
+   git push origin main --force
    ```
 
 ### Note:
