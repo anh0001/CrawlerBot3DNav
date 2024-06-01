@@ -18,7 +18,7 @@ git subtree add --prefix=src/livox_ros_driver2 https://github.com/Livox-SDK/livo
 
 3. Remove the subtree reference from Git history: Use the `filter-branch` command to remove all references to the subtree from your Git history. This is a bit more advanced and should be used with caution as it rewrites the history of your repository.
    ```bash
-   git filter-branch --tree-filter 'rm -rf src/livox_ros_driver2' HEAD
+   git filter-branch -f --tree-filter 'rm -rf src/livox_ros_driver2' HEAD
    ```
 
 4. Force push the changes (optional): If you are working on a shared repository, you might need to force push the changes to the remote repository.
