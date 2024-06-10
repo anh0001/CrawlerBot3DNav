@@ -1,5 +1,7 @@
 <launch>
 
+	<node name="base2livox" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0  3.14 0 3.14 base_footprint livox_frame "/>
+	<node name="base2camera" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0.3  0 0.4 0 base_footprint camera_link "/>
 	<!--user configure parameters for ros start-->
 	<arg name="lvx_file_path" default="livox_test.lvx"/>
 	<arg name="bd_list" default="100000000000000"/>

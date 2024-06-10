@@ -2,7 +2,9 @@
 import rospy
 import rosbag
 from std_msgs.msg import String
-from sensor_msgs.msg import CameraInfo, CompressedImage, PointCloud2
+from sensor_msgs.msg import CameraInfo, CompressedImage, PointCloud2, Imu
+from tf2_msgs.msg import TFMessage
+from livox_ros_driver2.msg import CustomMsg
 import message_filters
 import os
 from datetime import datetime
@@ -62,6 +64,12 @@ def save_data_callback(msg, topic_name):
             bag.close()
             start_new_bag()
 
+def livox_callback(msg, topic_name):
+    global recording, bag
+    if recording and bag:
+        rospy.loginfo(f"Writing message to {topic_name}")
+        bag.write(topic_name, msg)
+
 def recording_control():
     rospy.init_node('recording_control', anonymous=True)
 
@@ -74,7 +82,8 @@ def recording_control():
     depth_info_sub = message_filters.Subscriber('/camera/depth/camera_info', CameraInfo)
     depth_image_sub = message_filters.Subscriber('/camera/depth/image_rect_raw/compressed', CompressedImage)
     depth_points_sub = message_filters.Subscriber('/camera/depth/color/points', PointCloud2)
-    # lidar_points_sub = message_filters.Subscriber('/lidar/points', PointCloud2)
+    livox_imu_sub = rospy.Subscriber('/livox/imu', Imu, livox_callback, '/livox/imu')
+    livox_lidar_sub = rospy.Subscriber('/livox/lidar', CustomMsg, livox_callback, '/livox/lidar')
 
     # Synchronize messages and throttle them to the desired frequency
     ts = message_filters.ApproximateTimeSynchronizer(

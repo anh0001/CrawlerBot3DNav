@@ -15,7 +15,7 @@
     <arg name="color_height" value="480" />
 
     <!-- color_fps: Set the frame rate of the color sensor -->
-    <arg name="color_fps" value="10" />
+    <arg name="color_fps" value="30" />
 
     <!-- enable_*: Enable or disable specific sensors -->
     <arg name="enable_depth" value="true" />
@@ -37,37 +37,8 @@
     <arg name="unite_imu_method" value="" />
   </include>
 
-  <!-- Launch the Livox LiDAR node -->
-  <!-- Define the bd_list argument at the top level -->
-  <arg name="bd_list" default="100000000000000" />
-
   <include file="$(find livox_ros_driver2)/launch_ROS1/msg_MID360.launch">
-    <!-- lvx_file_path: Set the path to the Livox LiDAR data file -->
-    <arg name="lvx_file_path" value="livox_test.lvx" />
-    <!-- bd_list: Set the bd_list parameter -->
-    <arg name="bd_list" value="$(arg bd_list)" />
-    <!-- xfer_format: Set the xfer_format parameter -->
-    <arg name="xfer_format" value="1" />
-    <!-- multi_topic: Set the multi_topic parameter -->
-    <arg name="multi_topic" value="0" />
-    <!-- data_src: Set the data_src parameter -->
-    <arg name="data_src" value="0" />
-    <!-- publish_freq: Set the publish_freq parameter -->
-    <arg name="publish_freq" value="10.0" />
-    <!-- output_type: Set the output_type parameter -->
-    <arg name="output_type" value="0" />
-    <!-- rviz_enable: Set the rviz_enable parameter -->
-    <arg name="rviz_enable" value="false" />
-    <!-- rosbag_enable: Set the rosbag_enable parameter -->
-    <arg name="rosbag_enable" value="true" />
-    <!-- cmdline_arg: Set the cmdline_arg parameter -->
-    <arg name="cmdline_arg" value="$(arg bd_list)" />
-    <!-- msg_frame_id: Set the msg_frame_id parameter -->
-    <arg name="msg_frame_id" value="livox_frame" />
-    <!-- lidar_bag: Set the lidar_bag parameter -->
-    <arg name="lidar_bag" value="true" />
-    <!-- imu_bag: Set the imu_bag parameter -->
-    <arg name="imu_bag" value="true" />
+   
   </include>
 
   <!-- Launch the ROS Bridge Server -->
