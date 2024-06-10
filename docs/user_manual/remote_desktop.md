@@ -1,6 +1,7 @@
+
 # Setting Up RealVNC Server on a Remote Ubuntu Machine
 
-This guide will walk you through the process of setting up a RealVNC server on a remote Ubuntu machine without a physical monitor. This is achieved by configuring a virtual display. 
+This guide will walk you through the process of setting up a RealVNC server on a remote Ubuntu machine without a physical monitor. This is achieved by configuring a virtual display.
 
 ## Step 1: Install RealVNC Server
 
@@ -27,43 +28,50 @@ First, we need to install the RealVNC server on the Ubuntu machine. Follow these
 
 ## Step 2: Configure a Virtual Display
 
-Next, we need to configure a virtual display. Here's how:
+It is possible to create a dummy display in Ubuntu 20.04 to use AnyDesk for remote desktop access even without a physical monitor connected. Here are the steps:
 
-1. **Create a new xorg configuration file:**
-    Use the `nano` command to create a new configuration file.
+1. **Install the required packages:**
+    ```bash
+    sudo apt-get install xserver-xorg-video-dummy
+    ```
+
+2. **Create a new X server configuration file:**
     ```bash
     sudo nano /etc/X11/xorg.conf
     ```
 
-2. **Add the following configuration to create a virtual display:**
-    Copy and paste the following configuration into the file to create a virtual display.
-    ```plaintext
+3. **Add the following lines to the file:**
+    ```
     Section "Device"
-         Identifier  "Configured Video Device"
-         Driver      "dummy"
+        Identifier "Configured Video Device"
+        Driver "dummy"
     EndSection
 
     Section "Monitor"
-         Identifier  "Configured Monitor"
-         HorizSync   31.5-48.5
-         VertRefresh 50-70
+        Identifier "Configured Monitor"
     EndSection
 
     Section "Screen"
-         Identifier  "Default Screen"
-         Monitor     "Configured Monitor"
-         Device      "Configured Video Device"
-         DefaultDepth 24
-         SubSection "Display"
-              Depth 24
-              Modes "1280x1024"
-         EndSubSection
+        Identifier "Configured Screen"
+        Monitor "Configured Monitor"
+        Device "Configured Video Device"
+        SubSection "Display"
+            Modes "1920x1024"
+        EndSubSection
     EndSection
     ```
+    You can change the resolution in the `Modes` line as per your requirement.
 
-3. **Save and close the file.**
+4. **Save the file and exit.**
 
-## Step 3: Start the VNC Server
+5. **Restart the X server:**
+    ```bash
+    sudo systemctl restart gdm
+    ```
+
+6. After restarting, you should be able to start AnyDesk and connect to the dummy display.
+
+## Step 3: Start the VNC Server or AnyDesk
 
 Now, we can start the VNC server with the virtual display:
 
