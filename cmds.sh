@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the SCRIPT_DIR to the current script directory if not already set
-SCRIPT_DIR="${SCRIPT_DIR:-$(dirname "$(readlink -f "$0")")}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 LOG_DIR="$SCRIPT_DIR/logs"
 LOG_FILE="$LOG_DIR/run_command_$(date '+%Y-%m-%d_%H-%M-%S').log"
@@ -91,68 +91,77 @@ visualize_all() {
     done
 }
 
-build_packages() {
+build_and_install() {
+    local name="$1"
+    local build_cmd="$2"
+    local install_cmd="$3"
+    local src_dir="$4"
+    
+    log_message "Building and installing $name..."
+    
+    pushd "$src_dir" >/dev/null
+    mkdir -p build
+    pushd build >/dev/null
+    
+    if ! eval "$build_cmd"; then
+        log_message "Error: Failed to build $name."
+        popd >/dev/null
+        popd >/dev/null
+        return 1
+    fi
+    
+    if ! eval "$install_cmd"; then
+        log_message "Error: Failed to install $name."
+        popd >/dev/null
+        popd >/dev/null
+        return 1
+    fi
+    
+    popd >/dev/null
+    popd >/dev/null
+    
+    log_message "$name built and installed successfully."
+}
+
+setup_ros_environment() {
     if [ -f "/opt/ros/noetic/setup.bash" ]; then
         ros_distribution="noetic"
     elif [ -f "/opt/ros/melodic/setup.bash" ]; then
         ros_distribution="melodic"
     else
-        echo "Error: No supported ROS distribution found."
+        log_message "Error: No supported ROS distribution found."
         return 1
     fi
 
-    echo "Building ROS packages for $ros_distribution..."
-    export ROS_EDITION="ROS1"
-
+    log_message "Setting up ROS environment for $ros_distribution..."
+    
     local ros_setup_script="/opt/ros/$ros_distribution/setup.bash"
     if [[ ! -f "$ros_setup_script" ]]; then
-        echo "Error: ROS setup script for $ros_distribution does not exist."
+        log_message "Error: ROS setup script for $ros_distribution does not exist."
         return 1
     fi
 
     source "$ros_setup_script"
+    export ROS_EDITION="ROS1"
+    log_message "ROS environment set up successfully for $ros_distribution."
+}
 
-    # Build and install Livox-SDK2
-    pushd src/Livox-SDK2 >/dev/null
-    mkdir -p build
-    pushd build >/dev/null
-    if ! cmake .. && make -j; then
-        echo "Error: Failed to build Livox-SDK2."
-        popd >/dev/null
-        popd >/dev/null
+setup() {
+    log_message "Starting setup..."
+    
+    setup_ros_environment || return 1
+    
+    build_and_install "Livox-SDK2" "cmake .. && make -j" "sudo make install" "src/Livox-SDK2" || return 1
+    build_and_install "livox_ros_driver2" "./build.sh ROS1" "" "src/livox_ros_driver2" || return 1
+    
+    log_message "Building ROS packages..."
+    source devel/setup.bash
+    if ! catkin_make; then
+        log_message "Error: Failed to build ROS packages."
         return 1
     fi
-    if ! sudo make install; then
-        echo "Error: Failed to install Livox-SDK2."
-        popd >/dev/null
-        popd >/dev/null
-        return 1
-    fi
-    popd >/dev/null
-    popd >/dev/null
-
-    # # Build and install Livox-ROS-Driver2
-    # pushd src/livox_ros_driver2 >/dev/null
-    # if ! ./build.sh ROS1; then
-    #     echo "Error: Failed to build livox_ros_driver2."
-    #     popd >/dev/null
-    #     return 1
-    # fi
-    # popd >/dev/null
-
-    # if [ "$#" -eq 1 ]; then
-    #     if ! catkin_make --only-pkg-with-deps "$1"; then
-    #         echo "Error: Failed to build the specified ROS package."
-    #         return 1
-    #     fi
-    # else
-    #     if ! catkin_make; then
-    #         echo "Error: Failed to build the workspace."
-    #         return 1
-    #     fi
-    # fi
-
-    # echo "Build completed successfully."
+    
+    log_message "Setup completed successfully."
 }
 
 clear_logs() {
@@ -161,30 +170,38 @@ clear_logs() {
     log_message "Logs cleared."
 }
 
+clear_all() {    
+    clear_logs
+    log_message "Deleting devel and build directories..."
+    rm -rf devel build
+    log_message "Deleted devel and build directories."
+}
+
 case "$1" in
-    build-packages) build_packages ;;
+    setup) setup ;;
     run-fastlio-mapping) run_fastlio ;;
     map-to-npz) run_convert_npz ;;
     combine-maps-to-npz) combine_maps_to_npz ;;
     visualize-pc)
         if [ -z "$2" ]; then
-            echo "Error: Please specify the npz file to visualize."
-            echo "Usage: $0 visualize-pc <file.npz>"
+            log_message "Error: Please specify the npz file to visualize."
+            log_message "Usage: $0 visualize-pc <file.npz>"
             exit 1
         fi
         visualize_pointcloud "$2"
         ;;
     visualize-all) visualize_all ;;
     clear-logs) clear_logs ;;
+    clear-all) clear_all ;;
     *)
-        echo "Usage: $0 [build-packages|run-fastlio-mapping|map-to-npz|combine-maps-to-npz|visualize-pc|visualize-all|clear-logs]"
+        log_message "Usage: $0 [setup|run-fastlio-mapping|map-to-npz|combine-maps-to-npz|visualize-pc|visualize-all|clear-logs|clear-all]"
         ;;
 esac
 
 if [ "${BASH_SOURCE[0]}" != "${0}" ]; then
     _commands_completions() {
         local cur="${COMP_WORDS[COMP_CWORD]}"
-        local commands="build-packages run-fastlio-mapping map-to-npz combine-maps-to-npz visualize-pc visualize-all clear-logs"
+        local commands="setup run-fastlio-mapping map-to-npz combine-maps-to-npz visualize-pc visualize-all clear-logs clear-all"
         COMPREPLY=( $(compgen -W "${commands}" -- ${cur}) )
     }
     complete -F _commands_completions cmds.sh
