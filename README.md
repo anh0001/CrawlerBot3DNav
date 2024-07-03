@@ -7,8 +7,8 @@ This repository contains the software for a crawler robot designed to navigate u
 ## Getting Started
 1. **Clone the repository:**
     ```
-    git clone https://github.com/yourusername/crawler_robot_project.git
-    cd crawler_robot_project
+    git clone https://github.com/anh0001/CrawlerBot3DNav.git
+    cd CrawlerBot3DNav
     ```
 
 2. **Setup the environment:**

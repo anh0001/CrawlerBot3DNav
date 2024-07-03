@@ -7,15 +7,15 @@
     <arg name="serial_no" value="" />
 
     <!-- depth_width and depth_height: Set the resolution of the depth sensor -->
-    <arg name="depth_width" value="640" />
+    <arg name="depth_width" value="848" />
     <arg name="depth_height" value="480" />
 
     <!-- color_width and color_height: Set the resolution of the color sensor -->
-    <arg name="color_width" value="640" />
+    <arg name="color_width" value="848" />
     <arg name="color_height" value="480" />
 
     <!-- color_fps: Set the frame rate of the color sensor -->
-    <arg name="color_fps" value="30" />
+    <arg name="color_fps" value="10" />
 
     <!-- enable_*: Enable or disable specific sensors -->
     <arg name="enable_depth" value="true" />
@@ -27,7 +27,7 @@
     <arg name="enable_accel" value="false" />
     <arg name="enable_pointcloud" value="true" />
     <arg name="enable_sync" value="true" />
-    <arg name="align_depth" value="false" />
+    <arg name="align_depth" value="true" />
 
     <!-- tf_prefix: Set the prefix for the transform frames -->
     <arg name="tf_prefix" value="camera" />
@@ -38,7 +38,6 @@
   </include>
 
   <include file="$(find livox_ros_driver2)/launch_ROS1/msg_MID360.launch">
-   
   </include>
 
   <!-- Launch the ROS Bridge Server -->
