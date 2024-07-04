@@ -1,6 +1,12 @@
 <launch>
+    <node name="base2livox" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0  3.14 0 3.14 base_footprint livox_frame "/>
+	<node name="base2camera" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0.3  0 0.4 0 base_footprint camera_link "/>
+
+    <node name="livox_rviz" pkg="rviz" type="rviz" respawn="true"
+		  args="-d $(find livox_ros_driver2)/../../config/display_point_cloud_ROS1.rviz"/>
+
     <!-- Create the rosbag directory if it does not exist -->
-    <arg name="rosbag_dir" default="$(find your_package_name)/rosbag"/>
+    <arg name="rosbag_dir" default="$(find robot_control)/../../rosbag"/>
     <param name="~dir" value="$(arg rosbag_dir)"/>
 
     <!-- Start recording using rosbag -->
@@ -12,8 +18,13 @@
             /camera/depth/image_rect_raw
             /camera/depth/color/points
             /camera/imu
+            /camera/extrinsics/depth_to_color
+            /camera/accel/imu_info
+            /camera/gyro/imu_info
             /livox/imu
             /livox/lidar
+            /points_raw
+            /imu_raw
             /tf
             /tf_static"/>
         <param name="output_prefix" value="$(arg rosbag_dir)/recording_$(eval datetime.datetime.now().strftime('%Y%m%d_%H%M%S'))"/>

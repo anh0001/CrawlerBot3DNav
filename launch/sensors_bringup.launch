@@ -23,8 +23,8 @@
     <arg name="enable_infra1" value="false" />
     <arg name="enable_infra2" value="false" />
     <arg name="enable_fisheye" value="false" />
-    <arg name="enable_gyro" value="false" />
-    <arg name="enable_accel" value="false" />
+    <arg name="enable_gyro" value="true" />
+    <arg name="enable_accel" value="true" />
     <arg name="enable_pointcloud" value="true" />
     <arg name="enable_sync" value="true" />
     <arg name="align_depth" value="true" />
@@ -34,9 +34,25 @@
 
     <!-- unite_imu_method: Set the method for uniting IMU data. Options: 'linear_interpolation',
     'copy' -->
-    <arg name="unite_imu_method" value="" />
+    <arg name="unite_imu_method" value="linear_interpolation" />
+
+    <arg name="filters" value="pointcloud,temporal,spatial" />
+    <arg name="clip_distance" value="-2" />
+    <arg name="linear_accel_cov" value="0.01" />
+    <arg name="initial_reset" value="true" />
   </include>
 
   <include file="$(find livox_ros_driver2)/launch_ROS1/msg_MID360.launch">
+    <arg name="xfer_format" default="1"/>
+    <arg name="multi_topic" default="0"/>
+    <arg name="data_src" default="0"/>
+    <arg name="publish_freq" default="10.0"/>
+    <arg name="output_type" default="0"/>
+    <arg name="rviz_enable" default="false"/>  <!-- We will launch our own RViz configuration-->
+    <arg name="rosbag_enable" default="false"/> <!-- We will launch our own rosbag -->
+    <arg name="msg_frame_id" default="livox_frame"/>
+    <arg name="lidar_bag" default="true"/>
+    <arg name="imu_bag" default="true"/>
+    <param name="user_config_path" type="string" value="$(find livox_ros_driver2)/../../config/MID360_config.json"/>
   </include>
 </launch>
