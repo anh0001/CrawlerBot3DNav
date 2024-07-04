@@ -11,6 +11,7 @@
             /camera/depth/camera_info
             /camera/depth/image_rect_raw
             /camera/depth/color/points
+            /camera/imu
             /livox/imu
             /livox/lidar
             /tf
