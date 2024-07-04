@@ -39,13 +39,4 @@
 
   <include file="$(find livox_ros_driver2)/launch_ROS1/msg_MID360.launch">
   </include>
-
-  <!-- Launch the ROS Bridge Server -->
-  <node pkg="rosbridge_server" type="rosbridge_websocket" name="rosbridge_websocket">
-    <!-- port: Set the port for the ROS Bridge Server -->
-    <param name="port" value="9090" />
-  </node>
-
-  <!-- Launch the Recording Control Node -->
-  <node pkg="robot_control" type="recording_control.py" name="recording_control" output="screen" />
 </launch>
