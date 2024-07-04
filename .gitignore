@@ -1,5 +1,4 @@
 # Directory-specific ignores
-logs/
 results/
 build/
 devel/
@@ -168,4 +167,3 @@ cython_debug/
 #.idea/
 
 *.zip
-rosbag1/
