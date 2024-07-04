@@ -1,7 +1,7 @@
 # Crawler Robot Project
 
 ## Overview
-This repository contains the software for a crawler robot designed to navigate uneven terrain. The robot is equipped with tank-like wheels, two motors (left and right), a 3D LiDAR, and an RGBD RealSense camera. It is controlled remotely via wireless remote and records sensor measurements for later processing, with the goal of achieving future autonomous navigation.
+This repository contains the software for a crawler robot designed to navigate uneven terrain. The robot is equipped with tank-like wheels, two motors (left and right), a Livox MID-360 3D LiDAR, and an RGBD RealSense D455 camera. It is controlled remotely via wireless remote and records sensor measurements for later processing, with the goal of achieving future autonomous navigation.
 
 ## Getting Started
 1. **Clone the repository:**
