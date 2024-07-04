@@ -27,6 +27,6 @@
             /imu_raw
             /tf
             /tf_static"/>
-        <param name="output_prefix" value="$(arg rosbag_dir)/recording_$(eval datetime.datetime.now().strftime('%Y%m%d_%H%M%S'))"/>
+        <param name="output_prefix" value="$(arg rosbag_dir)/"/>
     </node>
 </launch>
