@@ -1,34 +1,35 @@
+# Setting Up TigerVNC Server on a Remote Ubuntu Machine
 
-# Setting Up RealVNC Server on a Remote Ubuntu Machine
+This guide will walk you through the process of setting up a TigerVNC server on a remote Ubuntu machine without a physical monitor. This is achieved by configuring a virtual display.
 
-This guide will walk you through the process of setting up a RealVNC server on a remote Ubuntu machine without a physical monitor. This is achieved by configuring a virtual display.
+## Step 1: Install TigerVNC Server
 
-## Step 1: Install RealVNC Server
+First, we need to install the TigerVNC server on the Ubuntu machine. Follow these steps:
 
-First, we need to install the RealVNC server on the Ubuntu machine. Follow these steps:
-
-1. **Download the RealVNC server package:**
-    Use the `wget` command to download the package.
+1. **Update the package list:**
+    Use the `apt-get update` command to update the package list.
     ```bash
-    wget https://www.realvnc.com/download/file/vnc.files/VNC-Server-6.7.2-Linux-x64.deb
-    ```
-    Note: Replace the URL with the latest version if necessary.
-
-2. **Install the downloaded package:**
-    Use the `dpkg` command to install the package.
-    ```bash
-    sudo dpkg -i VNC-Server-6.7.2-Linux-x64.deb
+    sudo apt-get update
     ```
 
-3. **Fix any dependency issues:**
-    If there are any dependency issues, use the `apt-get install -f` command to fix them.
+2. **Install the TigerVNC server package:**
+    Use the `apt-get install` command to install the package.
     ```bash
-    sudo apt-get install -f
+    sudo apt-get install tigervnc-standalone-server tigervnc-common
     ```
 
-## Step 2: Configure a Virtual Display
+## Step 2: Install XFCE Desktop Environment
 
-It is possible to create a dummy display in Ubuntu 20.04 to use AnyDesk for remote desktop access even without a physical monitor connected. Here are the steps:
+We need to install the XFCE desktop environment, which will be used for the remote desktop.
+
+1. **Install XFCE:**
+    ```bash
+    sudo apt-get install xfce4 xfce4-goodies
+    ```
+
+## Step 3: Configure a Virtual Display
+
+It is possible to create a dummy display in Ubuntu 20.04 to use TigerVNC for remote desktop access even without a physical monitor connected. Here are the steps:
 
 1. **Install the required packages:**
     ```bash
@@ -56,7 +57,7 @@ It is possible to create a dummy display in Ubuntu 20.04 to use AnyDesk for remo
         Monitor "Configured Monitor"
         Device "Configured Video Device"
         SubSection "Display"
-            Modes "1920x1024"
+            Modes "1920x1080"
         EndSubSection
     EndSection
     ```
@@ -69,25 +70,79 @@ It is possible to create a dummy display in Ubuntu 20.04 to use AnyDesk for remo
     sudo systemctl restart gdm
     ```
 
-6. After restarting, you should be able to start AnyDesk and connect to the dummy display.
+## Step 4: Create and Enable the VNC Server Service
 
-## Step 3: Start the VNC Server or AnyDesk
+We need to create a systemd service to start TigerVNC at boot.
 
-Now, we can start the VNC server with the virtual display:
-
-1. **Start the VNC server with the virtual display:**
-    Use the `systemctl start` command to start the server.
+1. **Set the VNC password:**
     ```bash
-    sudo systemctl start vncserver-x11-serviced.service
+    vncpasswd
     ```
 
-2. **Enable the VNC server to start on boot:**
-    Use the `systemctl enable` command to ensure the server starts on boot.
+2. **Create the service file:**
     ```bash
-    sudo systemctl enable vncserver-x11-serviced.service
+    sudo nano /etc/systemd/system/vncserver@.service
     ```
 
-## Step 4: Connect to the VNC Server
+3. **Add the following configuration to the service file:**
+    ```
+    [Unit]
+    Description=Start TigerVNC server at startup
+    After=syslog.target network.target
+
+    [Service]
+    Type=forking
+    User=mobi
+    PAMName=login
+    PIDFile=/home/mobi/.vnc/%H%i.pid
+    ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
+    ExecStart=/usr/bin/vncserver :%i -geometry 1920x1080 -depth 24 -localhost no
+    ExecStop=/usr/bin/vncserver -kill :%i
+
+    [Install]
+    WantedBy=multi-user.target
+    ```
+
+    Replace `mobi` with your username.
+
+4. **Reload the systemd daemon:**
+    ```bash
+    sudo systemctl daemon-reload
+    ```
+
+5. **Enable the VNC server service to start on boot:**
+    ```bash
+    sudo systemctl enable vncserver@1.service
+    ```
+
+6. **Start the VNC server service:**
+    ```bash
+    sudo systemctl start vncserver@1.service
+    ```
+
+    **Note:** Even if you encounter an error while running the command `sudo systemctl status vncserver@1.service`, you can ignore it. Try to reboot and remote it using the IP address and display number, for example, `192.168.2.2:1`.
+
+## Step 5: Configure the VNC Startup Script
+
+1. **Create or edit the xstartup file:**
+    ```bash
+    nano ~/.vnc/xstartup
+    ```
+
+2. **Add the following lines to the file:**
+    ```bash
+    #!/bin/bash
+    xrdb $HOME/.Xresources
+    startxfce4 &
+    xfce4-terminal &
+    ```
+
+3. **Make the xstartup file executable:**
+    ```bash
+    chmod +x ~/.vnc/xstartup
+    ```
+
+## Step 6: Connect to the VNC Server
 
 Finally, we can connect to the VNC server:
 
@@ -97,6 +152,10 @@ Finally, we can connect to the VNC server:
     ifconfig
     ```
 
-2. **Use a VNC viewer (e.g., RealVNC Viewer) to connect to the IP address.**
+2. **Use a VNC viewer (e.g., TigerVNC Viewer) to connect to the IP address on port `5901` (e.g., `192.168.1.2:5901`).**
 
-By following these steps, you should be able to set up the RealVNC server on a remote Ubuntu machine without needing a physical monitor. The virtual display configuration ensures that the desktop environment is accessible remotely.
+    **Note:** Use RealVNC Viewer for remoting.
+
+3. **While in a remote desktop, use xfce4-terminal for terminal by clicking run program and typing `terminal`.**
+
+By following these steps, you should be able to set up the TigerVNC server on a remote Ubuntu machine without needing a physical monitor. The virtual display configuration ensures that the desktop environment is accessible remotely.
