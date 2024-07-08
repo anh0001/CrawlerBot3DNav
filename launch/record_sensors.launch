@@ -1,10 +1,4 @@
 <launch>
-    <node name="base2livox" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0  3.14 0 3.14 base_footprint livox_frame "/>
-	<node name="base2camera" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0.3  0 0.4 0 base_footprint camera_link "/>
-
-    <!-- <node name="livox_rviz" pkg="rviz" type="rviz" respawn="true"
-		  args="-d $(find livox_ros_driver2)/../../config/display_point_cloud_ROS1.rviz"/>  -->
-
     <!-- Create the rosbag directory if it does not exist -->
     <arg name="rosbag_dir" default="$(find robot_control)/../../rosbag"/>
     <param name="~dir" value="$(arg rosbag_dir)"/>
