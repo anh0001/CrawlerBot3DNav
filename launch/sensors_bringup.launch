@@ -11,31 +11,31 @@
 
   <!-- Conditional launch for RealSense camera node -->
   <group if="$(arg use_realsense)">
-    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
-      <arg name="serial_no" value="" />
-      <arg name="depth_width" value="848" />
-      <arg name="depth_height" value="480" />
-      <arg name="color_width" value="848" />
-      <arg name="color_height" value="480" />
-      <arg name="color_fps" value="30" />
-      <arg name="enable_depth" value="true" />
-      <arg name="enable_color" value="true" />
-      <arg name="enable_infra1" value="false" />
-      <arg name="enable_infra2" value="false" />
-      <arg name="enable_fisheye" value="false" />
-      <arg name="enable_gyro" value="true" />
-      <arg name="enable_accel" value="true" />
-      <arg name="enable_pointcloud" value="true" />
-      <arg name="enable_sync" value="true" />
-      <arg name="align_depth" value="true" />
-      <arg name="tf_prefix" value="camera" />
-      <arg name="unite_imu_method" value="linear_interpolation" />
-      <arg name="filters" value="" />
-      <arg name="clip_distance" value="-2" />
-      <arg name="linear_accel_cov" value="0.01" />
-      <arg name="initial_reset" value="true" />
-    </include>
-  </group>
+      <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="serial_no" value="" />
+        <arg name="depth_width" value="848" />
+        <arg name="depth_height" value="480" />
+        <arg name="color_width" value="848" />
+        <arg name="color_height" value="480" />
+        <arg name="color_fps" value="30" />
+        <arg name="enable_depth" value="true" />
+        <arg name="enable_color" value="true" />
+        <arg name="enable_infra1" value="false" />
+        <arg name="enable_infra2" value="false" />
+        <arg name="enable_fisheye" value="false" />
+        <arg name="enable_gyro" value="true" />
+        <arg name="enable_accel" value="true" />
+        <arg name="enable_pointcloud" value="$(arg show_rviz)" />  <!-- Enable pointcloud only if RViz is enabled, for alignment the static transform above -->
+        <arg name="enable_sync" value="true" />
+        <arg name="align_depth" value="true" />
+        <arg name="tf_prefix" value="camera" />
+        <arg name="unite_imu_method" value="linear_interpolation" />
+        <arg name="filters" value="" />
+        <arg name="clip_distance" value="-2" />
+        <arg name="linear_accel_cov" value="0.01" />
+        <arg name="initial_reset" value="true" />
+      </include>
+    </group>
 
   <!-- Conditional launch for Livox driver node -->
   <group if="$(arg use_livox)">

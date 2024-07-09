@@ -10,7 +10,6 @@
             /camera/color/image_raw
             /camera/depth/camera_info
             /camera/depth/image_rect_raw
-            /camera/depth/color/points
             /camera/imu
             /camera/extrinsics/depth_to_color
             /camera/accel/imu_info
