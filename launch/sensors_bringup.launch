@@ -2,10 +2,12 @@
   <!-- Add these arguments -->
   <arg name="use_realsense" default="true"/>
   <arg name="use_livox" default="true"/>
-  <arg name="enable_rviz" default="false"/>
+  <arg name="show_rviz" default="false"/>
 
-  <node name="base2livox" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0  3.14 0 3.14 base_footprint livox_frame "/>
-	<node name="base2camera" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0.3  0 0.4 0 base_footprint camera_link "/>
+  <node name="base2livox_frame" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0.845  0 3.18 0 base_footprint livox_frame "/>
+	<node name="livox_frame2livox_link" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0  0 3.14 0 livox_frame livox_link "/>
+  <node name="base2camera_frame" pkg="tf2_ros" type="static_transform_publisher" args="0 0 1.105  0 0.422 0 base_footprint camera_frame "/>
+  <node name="camera_frame2camera_link" pkg="tf2_ros" type="static_transform_publisher" args="0 0 0  0 0 0 camera_frame camera_link "/>
 
   <!-- Conditional launch for RealSense camera node -->
   <group if="$(arg use_realsense)">
@@ -55,8 +57,8 @@
     </group>
 
   <!-- Conditional launch for RViz -->
-  <group if="$(arg enable_rviz)">
+  <group if="$(arg show_rviz)">
     <node name="livox_rviz" pkg="rviz" type="rviz" respawn="true"
-      args="-d $(find livox_ros_driver2)/../../config/display_point_cloud_ROS1.rviz"/>
+      args="-d $(find livox_ros_driver2)/../../config/sensors/display_point_cloud_ROS1.rviz"/>
   </group>
 </launch>
