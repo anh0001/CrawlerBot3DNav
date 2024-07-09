@@ -37,20 +37,22 @@
 
   <!-- Conditional launch for Livox driver node -->
   <group if="$(arg use_livox)">
-    <include file="$(find livox_ros_driver2)/launch_ROS1/msg_MID360.launch">
-      <arg name="xfer_format" value="1"/>
-      <arg name="multi_topic" value="0"/>
-      <arg name="data_src" value="0"/>
-      <arg name="publish_freq" value="10.0"/>
-      <arg name="output_type" value="0"/>
-      <arg name="rviz_enable" value="false"/>
-      <arg name="rosbag_enable" value="false"/>
-      <arg name="msg_frame_id" value="livox_frame"/>
-      <arg name="lidar_bag" value="true"/>
-      <arg name="imu_bag" value="true"/>
-      <param name="user_config_path" type="string" value="$(find livox_ros_driver2)/../../config/MID360_config.json"/>
-    </include>
-  </group>
+      <include file="$(find livox_ros_driver2)/launch_ROS1/msg_MID360.launch">
+        <!-- 0 is for pointcloud2 format -->
+        <!-- 1 is for custom message format -->
+        <arg name="xfer_format" value="0"/>  
+        <arg name="multi_topic" value="0"/>
+        <arg name="data_src" value="0"/>
+        <arg name="publish_freq" value="10.0"/>
+        <arg name="output_type" value="0"/>
+        <arg name="rviz_enable" value="false"/>
+        <arg name="rosbag_enable" value="false"/>
+        <arg name="msg_frame_id" value="livox_frame"/>
+        <arg name="lidar_bag" value="true"/>
+        <arg name="imu_bag" value="true"/>
+        <param name="user_config_path" type="string" value="$(find livox_ros_driver2)/../../config/MID360_config.json"/>
+      </include>
+    </group>
 
   <!-- Conditional launch for RViz -->
   <group if="$(arg enable_rviz)">
